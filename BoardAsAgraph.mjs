@@ -14,5 +14,26 @@ export const CreateBoardGraph = () => {
         return _table.get(`${coordinates[0]}${coordinates[1]}`);
     };
 
-    return {findSquare}
+    const moveKnight = (source, destination) => {
+        const startSquare = findSquare(source);
+        const arr = [startSquare];
+        while (arr.length > 0) {
+            const visitedNode = arr.pop();
+            console.log(visitedNode.coordinate);
+            if(findSquare(visitedNode.coordinate) === findSquare(destination)){
+                const destinationNode = findSquare(destination);
+                destinationNode.marked = true;
+                return destinationNode;
+            }
+            visitedNode.marked = true;
+            for(let i = 0; i<visitedNode.nextNodesCoordinates.length; i++){
+                if(visitedNode.nextNodesCoordinates[i] !== undefined){
+                    arr.unshift(findSquare(visitedNode.nextNodesCoordinates[i]));
+
+                }
+            }
+        }
+    };
+
+    return {findSquare, moveKnight};
 };

@@ -11,6 +11,7 @@ export const createGraphNode = (coordinate) => {
     ];
     nextNodesCoordinates = nextNodesCoordinates.filter((coord) => {return (coord[0]>=0 && coord[0]<=7 && coord[1]>=0 && coord[1]<=7);});
 
+    let marked  = false;
     
-    return {coordinate, nextNodesCoordinates};
+    return {coordinate, nextNodesCoordinates, marked};
 };
