@@ -2,4 +2,5 @@ import { CreateBoardGraph } from "./BoardAsAgraph.mjs";
 
 
 const board = CreateBoardGraph();
-console.log("found", board.moveKnight([0, 0], [1,1]));
+board.printArr(board.moveKnight([0, 0], [7,7]));
+board.printArr(board.moveKnight([0, 0], [7,4]));

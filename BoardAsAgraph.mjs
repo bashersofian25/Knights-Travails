@@ -17,23 +17,57 @@ export const CreateBoardGraph = () => {
     const moveKnight = (source, destination) => {
         const startSquare = findSquare(source);
         const arr = [startSquare];
+        const path = [];
         while (arr.length > 0) {
             const visitedNode = arr.pop();
-            console.log(visitedNode.coordinate);
+            visitedNode.marked = true;
+
             if(findSquare(visitedNode.coordinate) === findSquare(destination)){
                 const destinationNode = findSquare(destination);
                 destinationNode.marked = true;
-                return destinationNode;
+                let currentNode = destinationNode;
+                
+                while (currentNode.cameFrom !== null){
+                    path.unshift(currentNode.coordinate);
+
+                    currentNode = currentNode.cameFrom;
+                }
+                path.unshift(source);
+                cleanAfterMove();
+                return path;
             }
-            visitedNode.marked = true;
             for(let i = 0; i<visitedNode.nextNodesCoordinates.length; i++){
                 if(visitedNode.nextNodesCoordinates[i] !== undefined){
-                    arr.unshift(findSquare(visitedNode.nextNodesCoordinates[i]));
-
+                    if(findSquare(visitedNode.nextNodesCoordinates[i]).marked === false){
+                        const node = findSquare(visitedNode.nextNodesCoordinates[i]);
+                        node.cameFrom = visitedNode;
+                        arr.unshift(node);
+                    }
                 }
             }
         }
+        
     };
 
-    return {findSquare, moveKnight};
+    const printArr = (arr) => {
+        for (let i = 0; i<arr.length; i++){
+            if(i !== arr.length-1){
+                process.stdout.write(`[${arr[i]}] --> `);
+            }else {
+                console.log(`[${arr[i]}]`);
+            }
+            
+        }
+    };
+
+    const cleanAfterMove = () => {
+        const keys = _table.keys();
+        for (let i = 0; i < keys.length; i++){
+            const node = _table.get(keys[i]);
+            node.marked = false;
+            node.cameFrom = null;
+        }
+    };
+
+    return {findSquare, moveKnight, printArr};
 };
